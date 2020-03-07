@@ -2,6 +2,7 @@
 #Twitter API with Python_ Part 1 -- Streaming Live Tweets [720p].mp4  #RM:  delay these tutorial series
 #Day 29_ Twitter API with Python [720p].mp4  #RM:  delay watching tutorial because its not tweepy module.
 #Twitter API Tutorial For Beginners (Python) [720p]
+#Python Tweepy library (Twitter API) - part 1 [720p] YouTube Kostadin Ristovski, Python Tweepy library (Twitter API) - part 2 [720p] YouTube Kostadin Ristovski
 
 import tweepy
 import twitter_credentials as tc
@@ -71,11 +72,103 @@ for eachfindtweets in findtweets:
 	#eachfindtweets.user.name = eachfindtweets.user.name.encode("unicode-escape").decode("utf-8")
 	print(number,eachfindtweets.user.name+":"+eachfindtweets.text,end="\n\n")	
 	number += 1
+	'''
+	1 lil tourist:I’m smoking wax in my room feeling like Harry Potter finna take off to the hood on a broom
+
+	2 self-portrait aloty!:@miniyerms harry potter teas
+
+	...
+
+	9 ✌🏻😳eve’s lerones pet😳✌🏻:i don’t have a dick either and he thought i was a harry potter twink so
+
+	10 justintupper:@RealJamesWoods Harry Potter?
+	'''
 
 #Find trends
 trendsresults = api.trends_place(1)
 print(trendsresults) #print [{'trends': [{'name': '#WilderFury2', 'url': 'http://twitter.com/search?q=%23WilderFury2', 'promoted_content': None, 'query': '%23WilderFury2', 'tweet_volume': 99792}, {'name': '#WeLoveYouJin', 'url': 'http://twitter.com/search?q=%23WeLoveYouJin', 'promoted_content': None, 'query': '%23WeLoveYouJin', 'tweet_volume': 56140}, {'name': 'Leafs', 'url': 'http://twitter.com/search?q=Leafs', 'promoted_content': None, 'query': 'Leafs', 'tweet_volume': 63464}, . . .
 displaytrends = trendsresults[0]["trends"]
 for eachtrends in displaytrends:
-	print(eachtrends["name"]) #print #WilderFury2\n #WeLoveYouJin\n Leafs\n . . . 
+	print(eachtrends["name"]) #print #WilderFury2\n #WeLoveYouJin\n Leafs\n . . .
 
+#Display tweets text only based on keyword or keywords
+keywords = ["Python","C++"]
+followers = 200
+following = 200
+numberoftweets = 500
+for tweet in tweepy.Cursor(api.search, q=keywords, lang="en", result_type="recent").items(5):
+	#print(tweet.text.encode("unicode-escape").decode("utf-8"),end="\n\n")
+	#print(tweet.text,end="\n\n")
+	'''
+	@buabaj_ Guess that shows where my interest is as far as programming languages go (except maybe the Pascal part) fo… https://t.co/T8Xr9h2x8a
+
+	@buabaj_ Pascal, in less than 7 years jumped to the top, I guess that is testament to how good it really was in its… https://t.co/i6AWtcfnu0
+
+	Trying some animation tools in matplotlib 🤩. Any recommendations for complementary python modules? https://t.co/B2Ug0mBVvp
+
+	@iJacksonIsaac Well, first off, thanks a lot for the information.
+
+	Also, I know that this will be a massive project… https://t.co/OkqQJA9NmP
+
+	@WellPaidGeek Commodore 64 BASIC and assembler. Then C, C++, Ada, Clipper, Java (one of the first in Europe), and later Python, Perl...
+	'''
+	if tweet.user.followers_count > followers and tweet.user.friends_count > following and tweet.user.statuses_count > numberoftweets:
+		print(tweet.text,end="\n\n")
+		'''
+		RT @jonhoo: Hi friends! I recently gave a talk aimed at companies that are considering adding @rustlang to their tech stack. In it, I prese…
+
+		RT @contempediacom: #development Free Discounts
+		Advanced #C Programming Course =&gt; https://t.co/flF5BhuqNM
+
+		#100DaysOfCode #udemy #coupons #…
+		'''
+
+#Display tweets text only based on keyword no retweets
+keyword = ["The Beatles","McCartney"]
+for tweet in tweepy.Cursor(api.search, q=keyword, lang="en", result_type="recent").items(5):
+	if tweet.text.startswith("RT @") == True:
+		pass
+	else:
+		print(tweet.text,end="\n\n")
+	'''
+	i was just trying to remember all the names of the members of the beatles and tell me why i said ringo starr, john… https://t.co/Ene6HXo0M2
+	'''
+
+#Get tweets from user with user's tweet keyword
+#RM:  I can't get the code to work with multiple twitterid.  If multiple twitterid, then multiple twitterid must tweet the same tweet.
+#keyword is case sensitive
+twitterid = "elonmusk"
+keyword = "coronavirus"
+tweetswithkeyword = []
+for eachtweet in tweepy.Cursor(api.user_timeline, screen_name=twitterid, tweet_mode="extended").items(50):
+	#eachtweet.full_text = eachtweet.full_text.encode("unicode-escape").decode("utf-8")
+	if keyword in eachtweet.full_text:
+		print(eachtweet.full_text) #print The coronavirus panic is dumb
+		tweetswithkeyword.append(eachtweet.full_text)
+print(tweetswithkeyword) #print ['The coronavirus panic is dumb']
+
+#Textblob.  Check polarity -1 to +1 negative tweet to positive tweet sentiment.
+from textblob import TextBlob
+twitterid = "cnnbrk"
+keywordiscasesensitive = "Trump"
+sentimentnumber = 0.3
+positivesentiment = []
+negativesentiment = []
+neutralsentiment = []
+for eachtweet in tweepy.Cursor(api.user_timeline, screen_name=twitterid, tweet_mode="extended").items(50):
+	#eachtweet.full_text = eachtweet.full_text.encode("unicode-escape").decode("utf-8")
+	if keywordiscasesensitive in eachtweet.full_text:
+		if TextBlob(eachtweet.full_text).sentiment.polarity > +sentimentnumber:
+			positivesentiment.append(eachtweet.full_text)
+		elif TextBlob(eachtweet.full_text).sentiment.polarity < -sentimentnumber:
+			negativesentiment.append(eachtweet.full_text)
+		else:
+			neutralsentiment.append(eachtweet.full_text)
+print("POSITIVE",positivesentiment) #print POSITIVE []
+print("\n")
+print("NEGATIVE",negativesentiment) #print NEGATIVE []
+print("\n")
+print("NEUTRAL",neutralsentiment)
+'''
+NEUTRAL ['RT @CNNPolitics: BREAKING: President Trump replaces Mick Mulvaney with Rep. Mark Meadows as chief of staff https://t.co/HjpbzaqB0b https://…', 'President Trump will visit the Centers for Disease Control and Prevention in Atlanta, after earlier reports by officials that the visit was cancelled https://t.co/p6EXWhfnsS https://t.co/qugUmF9Jx8']
+'''
