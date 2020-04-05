@@ -4,11 +4,18 @@
 #Twitter API Tutorial For Beginners (Python) [720p]
 #Python Tweepy library (Twitter API) - part 1 [720p] YouTube Kostadin Ristovski, Python Tweepy library (Twitter API) - part 2 [720p] YouTube Kostadin Ristovski
 #How to use the Twitter API v1.1 with Python to stream tweets [720p] sentdex
+#Saving Tweets How to use the Twitter API v1.1 with Python to stream tweets sentdex
+#Cleaning up Tweets How to use the Twitter API v1.1 with Python to stream tweets sentdex
+#How To Post A Live Tweet With Python Using Twitter API [720p]
+#Live Tweets with Python  Twitter Streaming API and Tweepy Library
+#Python Programming - Creating A Twitter Retweet Bot w_ Tweepy [720p] YouTuber Tutorial Spot
+#How To Create A Twitter Bot With Python John G Fisher
+#How To Create A Twitter Bot With Python _ Build a Startup #4 [720p]
 
 import tweepy
 import twitter_credentials as tc
 
-#Create an api object.  Establish a connection with my developer information.  Store information in variable api.
+#Create an api object.  Establish a connection with my developer information.  api object talk to twitter, read data to Twitter, write data to Twitter.  Store information in variable api.
 authenticate = tweepy.OAuthHandler(tc.consumerkey, tc.consumersecret)
 authenticate.set_access_token(tc.accesstoken, tc.accesstokensecret)
 api = tweepy.API(authenticate)
@@ -266,3 +273,82 @@ def main():
 		except StopIteration:
 			break
 main()
+
+#Twitter retrieve all a Twitter user's tweet mentions
+mentionsquickintroduction = api.mentions_timeline()
+print(type(mentionsquickintroduction)) #print <class 'tweepy.models.ResultSet'> #RM:  instructor tweepy.models.ResultSet searched on Google
+print(type(mentionsquickintroduction[0])) #print <class 'tweepy.models.Status'> #RM:  instructor tweepy.models.Status searched on Google
+print(mentionsquickintroduction[0].__dict__) #converts an object to a dictionary
+print(mentionsquickintroduction[0].__dict__.keys()) #The attributes of the class
+'''
+dict_keys(['_api', '_json', 'created_at', 'id', 'id_str', 'text', 'truncated', 'entities', 'source', 'source_url', 'in_reply_to_status_id', 'in_reply_to_status_id_str', 'in_reply_to_user_id', 'in_reply_to_user_id_str', 'in_reply_to_screen_name', 'author', 'user', 'geo', 'coordinates', 'place', 'contributors', 'is_quote_status', 'retweet_count', 'favorite_count', 'favorited', 'retweeted', 'lang'])
+'''
+print(mentionsquickintroduction[0].text) #print @inin61 @scaloy Many healthy people age 20-29, without any #COVID19 symptoms, have the #coronavirus and are contagi… https://t.co/4azHIamkWX
+print(mentionsquickintroduction[0].text.lower()) #print @inin61 @scaloy many healthy people age 20-29, without any #covid19 symptoms, have the #coronavirus and are contagi… https://t.co/4azhiamkwx
+print("\n")
+#for loop retrieve Twitter user's tweet mentions
+mentions = api.mentions_timeline()
+for mention in mentions:
+	print(str(mention.id) + " - " + mention.text)
+	'''
+	1246591721187602432 - @inin61 #helloworldtest
+	1239441256465358849 - @inin61 @scaloy Many healthy people age 20-29, without any #COVID19 symptoms, have the #coronavirus and are contagi… https://t.co/4azHIamkWX
+	1239417925464805376 - @inin61 just to be safe, i guess
+	1237643262581600256 - @inin61 I’ve heard it floated around for a while. Figured I’d give it a shot in lieu of going to SDCC this year.
+	...
+	'''
+	if "#helloworldtest" in mention.text.lower():
+		print("found #helloworldtest")
+print("\n")
+#save the last tweet mention id number to the text file.  The last tweet mention id number is excluded when retrieving the newest tweet mention id
+filename = "lasttweetmentionidtext.txt"
+def retrievelastseenid(filename):
+	filenameread = open(filename,"r")
+	lasttweetmentionid = int(filenameread.read().strip())
+	filenameread.close()
+	return lasttweetmentionid
+def updatelastseenid(lasttweetmentionid, filename):
+	filenamewrite = open(filename,"w")
+	filenamewrite.write(str(lasttweetmentionid))
+	filenamewrite.close()
+	return
+lasttweetmentionid = retrievelastseenid(filename)
+displaymentions = api.mentions_timeline(since_id=lasttweetmentionid, tweet_mode="extended")
+#reversed to loop older tweets first or loop from older tweets to newest tweets.  twitter id 1246591721187602432 @inin61 #helloworldtest tweeted 04/04/20 is not included.  tweets after 1246591721187602432 are printed.  To get the newest tweets mention, use twitter id 1239441256465358849 on lasttweetmentionidtext.txt file
+for eachdisplaymentions in reversed(displaymentions):
+	print(str(eachdisplaymentions.id) + " - " + eachdisplaymentions.full_text) #print 1246606049534038016 - @inin61 ignoretweet abcdefghijklmnopqrstuvwxyz1234567890 .- -... -.-. -.. . ..-. --. .... .. .--- -.- .-.. -- -. --- .--. --.- .-. ... - ..- ...- .-- -..- -.-- --.. .---- ..--- ...-- ....- ..... -.... --... ---.. ----. ----- ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 AAAAAAAAAAAAAAAAAA
+	lasttweetmentionid = eachdisplaymentions.id	
+	#call function to save newest tweet mention id to filename
+	updatelastseenid(lasttweetmentionid, filename)
+	if "#helloworldtest" in eachdisplaymentions.full_text.lower():
+		print("found #helloworldtest again")
+		api.update_status(status="@"+eachdisplaymentions.user.screen_name+" hello world test back to you", in_reply_to_status_id=eachdisplaymentions.id)
+#create a function reply to tweets
+def replytotweets():
+	#save the last tweet mention id number to the text file.  The last tweet mention id number is excluded when retrieving the newest tweet mention id
+	filename = "lasttweetmentionidtext.txt"
+	def retrievelastseenid(filename):
+		filenameread = open(filename,"r")
+		lasttweetmentionid = int(filenameread.read().strip())
+		filenameread.close()
+		return lasttweetmentionid
+	def updatelastseenid(lasttweetmentionid, filename):
+		filenamewrite = open(filename,"w")
+		filenamewrite.write(str(lasttweetmentionid))
+		filenamewrite.close()
+		return
+	lasttweetmentionid = retrievelastseenid(filename)
+	displaymentions = api.mentions_timeline(since_id=lasttweetmentionid, tweet_mode="extended")
+	#reversed to loop older tweets first or loop from older tweets to newest tweets.  twitter id 1246591721187602432 @inin61 #helloworldtest tweeted 04/04/20 is not included.  tweets after 1246591721187602432 are printed.  To get the newest tweets mention, use twitter id 1239441256465358849 on lasttweetmentionidtext.txt file
+	for eachdisplaymentions in reversed(displaymentions):
+		print(str(eachdisplaymentions.id) + " - " + eachdisplaymentions.full_text) #print 1246606049534038016 - @inin61 ignoretweet abcdefghijklmnopqrstuvwxyz1234567890 .- -... -.-. -.. . ..-. --. .... .. .--- -.- .-.. -- -. --- .--. --.- .-. ... - ..- ...- .-- -..- -.-- --.. .---- ..--- ...-- ....- ..... -.... --... ---.. ----. ----- ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 AAAAAAAAAAAAAAAAAA
+		lasttweetmentionid = eachdisplaymentions.id	
+		#call function to save newest tweet mention id to filename
+		updatelastseenid(lasttweetmentionid, filename)
+		if "#helloworldtest" in eachdisplaymentions.full_text.lower():
+			print("found #helloworldtest again")
+			api.update_status(status="@"+eachdisplaymentions.user.screen_name+" hello world test back to you", in_reply_to_status_id=eachdisplaymentions.id)
+import time
+while True:
+	replytotweets()
+	time.sleep(15) #Stop at 15 seconds and then start again
