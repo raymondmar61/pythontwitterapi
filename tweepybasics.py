@@ -69,3 +69,34 @@ for eachfriend in tweepy.Cursor(api.friends).items():
 for eachstatus in tweepy.Cursor(api.home_timeline).items(10):
 	#print(eachstatus)
 	print(eachstatus.text) #This movie was SO GOOD
+
+#WIP Print recent tweets in my timeline including retweets with dates, url links, and retweet link
+#https://stackoverflow.com/questions/48436964/problems-collecting-280-characters-using-tweepy
+# mytweetslist = []
+# mytweets = api.user_timeline(screen_name = "inin61", count=1, tweet_mode="extended")
+# print(mytweets) #print [Status(_api=<tweepy.api.API object at 0x7f77b2fa9278>, _json={'created_at': 'Wed Jul 15 19:06:17 +0000 2020', 'id': 1283478007181537280, ...
+# print(mytweets[0]) #print [Status(_api=<tweepy.api.API object at 0x7f77b2fa9278>, _json={'created_at': 'Wed Jul 15 19:06:17 +0000 2020', 'id': 1283478007181537280, ...
+# print(mytweets[0]._json) #print {'created_at': 'Wed Jul 15 19:06:17 +0000 2020', 'id': 1283478007181537280, ...
+
+# for status in tweepy.Cursor(api.user_timeline, id="inin61", tweet_mode="extended").items(3):
+# 	#print(status._json) #print {'created_at': 'Wed Jul 15 19:06:17 +0000 2020', 'id': 1283478007181537280, ...
+# 	#print(status._json["full_text"])
+
+# for status in api.user_timeline(id="inin61", tweet_mode="extended", count=3):
+# 	print(status._json["full_text"])
+
+# for tweet in tweepy.Cursor(api.search,q="inin61",lang="en",since="2019-10-26",tweet_mode="extended").items():
+# 	print(tweet.full_text)
+
+for status in api.user_timeline(id="inin61", tweet_mode="extended", count=5):
+	#print(status) #print Status(_api=<tweepy.api.API object at 0x7f190e2882e8>, _json={'created_at': 'Wed Jul 15 19:06:17 +0000 2020', 'id': 1283478007181537280, 'id_str': '1283478007181537280', 'full_text': ...
+	#print(type(status)) #print <class 'tweepy.models.Status'>
+	try:
+		print(status._json["retweeted_status"]["full_text"]) #print Residences are cleaner in the autumn and winter seasons because the windows are closed.  People spend more time indoors.
+		print(status._json["retweeted_status"]["created_at"]) #print Residences are cleaner in the autumn and winter seasons because the windows are closed.  People spend more time indoors.
+		print(status._json["retweeted_status"]["entities"]["media"][0]["expanded_url"]) #print https://twitter.com/espn/status/1283084418060451840/video/1
+	except KeyError:
+		print(status._json["full_text"]) #print Residences are cleaner in the autumn and winter seasons because the windows are closed.  People spend more time indoors.
+		print(status._json["created_at"]) #print Residences are cleaner in the autumn and winter seasons because the windows are closed.  People spend more time indoors.
+		for eachtweeturl in status._json["entities"]["urls"]:
+			print(eachtweeturl["expanded_url"])
