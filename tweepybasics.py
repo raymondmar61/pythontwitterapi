@@ -88,6 +88,7 @@ for eachstatus in tweepy.Cursor(api.home_timeline).items(10):
 # for tweet in tweepy.Cursor(api.search,q="inin61",lang="en",since="2019-10-26",tweet_mode="extended").items():
 # 	print(tweet.full_text)
 
+#WIP 2 Print recent tweets in my timeline including retweets with dates, url links, and retweet link
 for status in api.user_timeline(id="inin61", tweet_mode="extended", count=5):
 	#print(status) #print Status(_api=<tweepy.api.API object at 0x7f190e2882e8>, _json={'created_at': 'Wed Jul 15 19:06:17 +0000 2020', 'id': 1283478007181537280, 'id_str': '1283478007181537280', 'full_text': ...
 	#print(type(status)) #print <class 'tweepy.models.Status'>
@@ -100,3 +101,48 @@ for status in api.user_timeline(id="inin61", tweet_mode="extended", count=5):
 		print(status._json["created_at"]) #print Residences are cleaner in the autumn and winter seasons because the windows are closed.  People spend more time indoors.
 		for eachtweeturl in status._json["entities"]["urls"]:
 			print(eachtweeturl["expanded_url"])
+for status in api.user_timeline(id="inin61", tweet_mode="extended", count=20):
+	#print(status) #print Status(_api=<tweepy.api.API object at 0x7f190e2882e8>, _json={'created_at': 'Wed Jul 15 19:06:17 +0000 2020', 'id': 1283478007181537280, 'id_str': '1283478007181537280', 'full_text': ...
+	#print(type(status)) #print <class 'tweepy.models.Status'>
+	print(status._json["id"])
+	if status._json["retweeted"] == False:
+		print(status._json["created_at"])
+		print(type(status._json["created_at"]))
+		print(status._json["created_at"][0:19])
+		print(status._json["full_text"])
+		for eachtweeturl in status._json["entities"]["urls"]:
+			print(eachtweeturl["expanded_url"])
+		try:
+			for eachtweeturl in status._json["extended_entities"]["media"]:
+				print(eachtweeturl["media_url"])
+		except KeyError:
+			pass
+		try:
+			for eachtweeturl in status._json["extended_entities"]["media"]:
+				print(eachtweeturl["video_info"]["variants"][0]["url"])
+		except KeyError:
+			pass
+	elif status._json["retweeted"] == True:
+		print(status._json["retweeted_status"]["created_at"])
+		print(status._json["retweeted_status"]["user"]["screen_name"])
+		print(status._json["retweeted_status"]["full_text"])
+		print(status._json["retweeted_status"]["id"])
+		for eachtweeturl in status._json["entities"]["urls"]:
+			print(eachtweeturl["expanded_url"])
+		try:
+			for eachtweeturl in status._json["extended_entities"]["media"]:
+				print(eachtweeturl["media_url"])
+		except KeyError:
+			pass
+		try:
+			for eachtweeturl in status._json["extended_entities"]["media"]:
+				print(eachtweeturl["video_info"]["variants"][0]["url"])
+		except KeyError:
+			pass
+	else:
+		print("There is an error.")
+	print("\n")
+#https://stackoverflow.com/questions/18711398/converting-twitters-date-format-to-datetime-in-python/18736802
+from datetime import datetime
+d = datetime.strptime(status._json["created_at"], '%a %b %d %H:%M:%S %z %Y')
+print(d.strftime('%Y-%m-%d'))
