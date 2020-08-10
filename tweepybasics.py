@@ -146,3 +146,79 @@ for status in api.user_timeline(id="inin61", tweet_mode="extended", count=20):
 from datetime import datetime
 d = datetime.strptime(status._json["created_at"], '%a %b %d %H:%M:%S %z %Y')
 print(d.strftime('%Y-%m-%d'))
+
+#WIP 3 Added retweet my own tweets.  I think I'm getting information from different jsons fields.  Can I be consistent use same json fields?
+for status in api.user_timeline(id="inin61", tweet_mode="extended", count=21):
+	#print(status)
+	print("Retweet myself?:",status._json["is_quote_status"])
+	print("Retweet?:",status._json["retweeted"])
+	#print(status) #print Status(_api=<tweepy.api.API object at 0x7f190e2882e8>, _json={'created_at': 'Wed Jul 15 19:06:17 +0000 2020', 'id': 1283478007181537280, 'id_str': '1283478007181537280', 'full_text': ...
+	#print(type(status)) #print <class 'tweepy.models.Status'>
+	print("Tweet id:",status._json["id"])
+	print("Tweet date:",status._json["created_at"])
+	#print(type(status._json["created_at"])) #print <class 'str'>
+	if status._json["is_quote_status"] == True:
+		print("Tweet text:",status._json["full_text"])
+		print("Retweet myself date:",status._json["quoted_status"]["created_at"])
+		print("Retweet myself user:",status._json["quoted_status"]["user"]["screen_name"])
+		print("Retweet myself tweet text:",status._json["quoted_status"]["full_text"])
+		print("Retweet myself tweet id:",status._json["quoted_status"]["id"])
+		for eachtweeturl in status._json["quoted_status"]["entities"]["urls"]:
+			print("Retweet myself url:",eachtweeturl["expanded_url"])
+		try:
+			for eachtweeturl in status._json["quoted_status"]["extended_entities"]["media"]:
+				print("Retweet myself retweet picture url:",eachtweeturl["media_url_https"])
+		except KeyError:
+			pass
+		try:
+			for eachtweeturl in status._json["quoted_status"]["extended_entities"]["media"]:
+				print("Retweet myself video link:",eachtweeturl["video_info"]["variants"][0]["url"])
+		except KeyError:
+			pass
+	elif status._json["retweeted"] == False:
+		print("Tweet text:",status._json["full_text"])
+		for eachtweeturl in status._json["entities"]["urls"]:
+			print("expanded url:",eachtweeturl["expanded_url"])
+		try:
+			for eachtweeturl in status._json["extended_entities"]["media"]:
+				print("Media url:",eachtweeturl["media_url"])
+		except KeyError:
+			pass
+		try:
+			for eachtweeturl in status._json["extended_entities"]["media"]:
+				print("Video url:",eachtweeturl["video_info"]["variants"][0]["url"])
+		except KeyError:
+			pass
+	elif status._json["retweeted"] == True:
+		print("Retweet date:",status._json["retweeted_status"]["created_at"])
+		print("Retweet user:",status._json["retweeted_status"]["user"]["screen_name"])
+		print("Retweet tweet text:",status._json["retweeted_status"]["full_text"])
+		print("Retweet tweet id:",status._json["retweeted_status"]["id"])
+		for eachtweeturl in status._json["entities"]["urls"]:
+			print("Retweet media url:",eachtweeturl["expanded_url"])
+		try:
+			for eachtweeturl in status._json["extended_entities"]["media"]:
+				print("Video url:",eachtweeturl["media_url"])
+		except KeyError:
+			pass
+		try:
+			for eachtweeturl in status._json["extended_entities"]["media"]:
+				print(eachtweeturl["video_info"]["variants"][0]["url"])
+		except KeyError:
+			pass
+	# elif status._json["is_quote_status"] == False:
+	# 	for eachtweeturl in status._json["entities"]["urls"]:
+	# 		print("expanded media url:",eachtweeturl["expanded_url"])
+	# 	try:
+	# 		for eachtweeturl in status._json["extended_entities"]["media"]:
+	# 			print("media url:",eachtweeturl["media_url_https"])
+	# 	except KeyError:
+	# 		pass
+	# 	try:
+	# 		for eachtweeturl in status._json["extended_entities"]["media"]:
+	# 			print("video url:",eachtweeturl["video_info"]["variants"][0]["url"])
+	# 	except KeyError:
+	# 		pass
+	else:
+		print("There is an error.")
+	print("\n")
