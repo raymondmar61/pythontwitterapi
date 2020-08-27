@@ -222,3 +222,60 @@ for status in api.user_timeline(id="inin61", tweet_mode="extended", count=21):
 	else:
 		print("There is an error.")
 	print("\n")
+
+#WIP 4 Correct fields.  All links and text downloaded correctly.
+for status in api.user_timeline(id="inin61", tweet_mode="extended", count=1):
+	print("\n")
+	print("My Tweet ID ", status._json["id"])
+	print("Retweet? ",status._json["retweeted"])
+	if status._json["is_quote_status"] == True:
+		print("Retweeting Myself Date:",status._json["quoted_status"]["created_at"])
+		print("Tweet text:",status._json["full_text"])
+		print("Retweet Myself Tweet text:",status._json["quoted_status"]["full_text"])
+		print("Retweet myself user:",status._json["quoted_status"]["user"]["screen_name"])
+		print("Retweet myself tweet id:",status._json["quoted_status"]["id"])
+		for eachtweeturl in status._json["quoted_status"]["entities"]["urls"]:
+			print("Retweet myself url:",eachtweeturl["expanded_url"])
+		try:
+			for eachtweeturl in status._json["quoted_status"]["extended_entities"]["media"]:
+				print("Retweet myself retweet picture url:",eachtweeturl["media_url_https"])
+		except KeyError:
+			pass
+		try:
+			for eachtweeturl in status._json["quoted_status"]["extended_entities"]["media"]:
+				print("Retweet myself video link:",eachtweeturl["video_info"]["variants"][0]["url"])
+		except KeyError:
+			pass
+	elif status._json["retweeted"] == False:
+		print("Tweet Date "+status._json["created_at"])
+		print("Tweet Text "+status._json["full_text"])
+		for eachtweeturl in status._json["entities"]["urls"]:
+			print("URL "+eachtweeturl["expanded_url"])
+		try:
+			for eachtweeturl in status._json["extended_entities"]["media"]:
+				print("Pic url:",eachtweeturl["media_url"])
+		except KeyError:
+			pass
+		try:
+			for eachtweeturl in status._json["extended_entities"]["media"]:
+				print("Video url:",eachtweeturl["video_info"]["variants"][0]["url"])
+		except KeyError:
+			pass
+	elif status._json["retweeted"] == True:
+		print("Retweeting Date "+status._json["created_at"])
+		print("Tweet Date "+status._json["retweeted_status"]["created_at"])
+		print("Retweeting From "+status._json["retweeted_status"]["user"]["screen_name"])
+		print("Retweeting Text Full "+status._json["retweeted_status"]["full_text"])
+		print("Retweeting ID", status._json["retweeted_status"]["id"])
+		for eachtweeturl in status._json["retweeted_status"]["entities"]["urls"]:
+			print("URL "+eachtweeturl["url"])
+		try:
+			for eachtweeturl in status._json["retweeted_status"]["entities"]["media"]:
+				print("Pic URL "+eachtweeturl["media_url_https"])
+		except KeyError:
+			pass
+		try:
+			for eachtweeturl in status._json["retweeted_status"]["extended_entities"]["media"][0]["video_info"]["variants"]:
+				print("Video URL "+eachtweeturl["url"])
+		except KeyError:
+			pass
