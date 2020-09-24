@@ -16,14 +16,14 @@ for eachdownloadtimelinetweets in downloadtimelinetweets:
     print(tweetynumber, eachdownloadtimelinetweets.text)
     tweetynumber += 1
     '''
-	1 Having trouble reaching climax? I got you 💋
-	https://t.co/GLhixsimhj
-	2 Did Clementine Barnabet, priestess of a strange sacrificial cult, bludgeon seven families to death with an ax?
-	https://t.co/1mdtnfVMmj
-	3 RT @Cleavon_MD: (1/6) Over the past 6 weeks in NYC, I've treated 100s of patients with #COVID. My #PPE kept me healthy😷
+    1 Having trouble reaching climax? I got you 💋
+    https://t.co/GLhixsimhj
+    2 Did Clementine Barnabet, priestess of a strange sacrificial cult, bludgeon seven families to death with an ax?
+    https://t.co/1mdtnfVMmj
+    3 RT @Cleavon_MD: (1/6) Over the past 6 weeks in NYC, I've treated 100s of patients with #COVID. My #PPE kept me healthy😷
 
-	If the government…
-	'''
+    If the government…
+    '''
 
 #Get the user's information
 userinformation = api.get_user("ININ61")
@@ -40,28 +40,28 @@ for eachfriend in userinformation.friends():
     print(eachfriend.screen_name) #print arstechnica
     print(eachfriend.location) #print NYC - Boston - Chicago - SF
     '''
-	User(_api=<tweepy.api.API object at 0x7fb4e3ae41d0>, _json={'id': 717313, 'id_str': '717313', 'name': 'Ars Technica', 'screen_name': 'arstechnica', 'location': 'NYC - Boston - Chicago - SF' . . .
-	'''
+    User(_api=<tweepy.api.API object at 0x7fb4e3ae41d0>, _json={'id': 717313, 'id_str': '717313', 'name': 'Ars Technica', 'screen_name': 'arstechnica', 'location': 'NYC - Boston - Chicago - SF' . . .
+    '''
 
 #Cursor Object
 for tweet in tweepy.Cursor(api.search, q='tweepy').items(10):
     print(tweet.text)
     '''
-	@masonasons @BrailleScreen @destructatron04 And I suppose there are also still other options. I'm not sure how up t… https://t.co/ICBEjpzNWx
-	RT @tweet_bot_1729: Whole every miles as tiled at seven or.#python #bot #programming #random #code #tweepy #API https://t.co/Eb3cGBTgTI
-	Een bloemetje voor het slapengaan. Trusten Tweepy's! 😴 https://t.co/0ZLblF7y0N
-	Learn To Build Twitter Bot With Tweepy
-	Learn About Access Token, Keys And It's Usage
-	Deploy Bot Online And Run 24/7… https://t.co/SRbazSZ4mb
-	@HermaineM If you ever hit a follow limit here is a plug 
+    @masonasons @BrailleScreen @destructatron04 And I suppose there are also still other options. I'm not sure how up t… https://t.co/ICBEjpzNWx
+    RT @tweet_bot_1729: Whole every miles as tiled at seven or.#python #bot #programming #random #code #tweepy #API https://t.co/Eb3cGBTgTI
+    Een bloemetje voor het slapengaan. Trusten Tweepy's! 😴 https://t.co/0ZLblF7y0N
+    Learn To Build Twitter Bot With Tweepy
+    Learn About Access Token, Keys And It's Usage
+    Deploy Bot Online And Run 24/7… https://t.co/SRbazSZ4mb
+    @HermaineM If you ever hit a follow limit here is a plug 
 
-	https://t.co/d4G2dWnMMM
-	@Lebohang20S Have a lovely night sleep my tweepy..😍
-	@PaulDashJohn @MYANC @PresJGZuma Who used Tweepy to deploy you?
-	@jessphillips @RishiSunak
-	Test tweet from Tweepy Python
-	Sending my first tweet via Tweepy!
-	'''
+    https://t.co/d4G2dWnMMM
+    @Lebohang20S Have a lovely night sleep my tweepy..😍
+    @PaulDashJohn @MYANC @PresJGZuma Who used Tweepy to deploy you?
+    @jessphillips @RishiSunak
+    Test tweet from Tweepy Python
+    Sending my first tweet via Tweepy!
+    '''
 #print all my friends
 for eachfriend in tweepy.Cursor(api.friends).items():
     print(eachfriend.name) #print Wizarding World\n BrianBanmiller\n CHP - Alerts\n . . .
@@ -79,14 +79,14 @@ for eachstatus in tweepy.Cursor(api.home_timeline).items(10):
 # print(mytweets[0]._json) #print {'created_at': 'Wed Jul 15 19:06:17 +0000 2020', 'id': 1283478007181537280, ...
 
 # for status in tweepy.Cursor(api.user_timeline, id="inin61", tweet_mode="extended").items(3):
-# 	#print(status._json) #print {'created_at': 'Wed Jul 15 19:06:17 +0000 2020', 'id': 1283478007181537280, ...
-# 	#print(status._json["full_text"])
+#   #print(status._json) #print {'created_at': 'Wed Jul 15 19:06:17 +0000 2020', 'id': 1283478007181537280, ...
+#   #print(status._json["full_text"])
 
 # for status in api.user_timeline(id="inin61", tweet_mode="extended", count=3):
-# 	print(status._json["full_text"])
+#   print(status._json["full_text"])
 
 # for tweet in tweepy.Cursor(api.search,q="inin61",lang="en",since="2019-10-26",tweet_mode="extended").items():
-# 	print(tweet.full_text)
+#   print(tweet.full_text)
 
 #WIP 2 Print recent tweets in my timeline including retweets with dates, url links, and retweet link
 for status in api.user_timeline(id="inin61", tweet_mode="extended", count=5):
@@ -207,18 +207,18 @@ for status in api.user_timeline(id="inin61", tweet_mode="extended", count=21):
         except KeyError:
             pass
     # elif status._json["is_quote_status"] == False:
-    # 	for eachtweeturl in status._json["entities"]["urls"]:
-    # 		print("expanded media url:",eachtweeturl["expanded_url"])
-    # 	try:
-    # 		for eachtweeturl in status._json["extended_entities"]["media"]:
-    # 			print("media url:",eachtweeturl["media_url_https"])
-    # 	except KeyError:
-    # 		pass
-    # 	try:
-    # 		for eachtweeturl in status._json["extended_entities"]["media"]:
-    # 			print("video url:",eachtweeturl["video_info"]["variants"][0]["url"])
-    # 	except KeyError:
-    # 		pass
+    #   for eachtweeturl in status._json["entities"]["urls"]:
+    #       print("expanded media url:",eachtweeturl["expanded_url"])
+    #   try:
+    #       for eachtweeturl in status._json["extended_entities"]["media"]:
+    #           print("media url:",eachtweeturl["media_url_https"])
+    #   except KeyError:
+    #       pass
+    #   try:
+    #       for eachtweeturl in status._json["extended_entities"]["media"]:
+    #           print("video url:",eachtweeturl["video_info"]["variants"][0]["url"])
+    #   except KeyError:
+    #       pass
     else:
         print("There is an error.")
     print("\n")
@@ -341,3 +341,205 @@ for status in api.user_timeline(id="inin61", tweet_mode="extended", count=100):
             pass
     else:
         print("Problem")
+
+#WIP 6 Retweet Quoted What if the quoted is pics, videos, or both pics and videos.  Retween quoted pic origin pic is good.
+for status in api.user_timeline(id="inin61", tweet_mode="extended", count=2):
+    print("\n")
+    print(status)
+    print("\n")
+    print("Tweet ID", status._json["id"])
+    if status._json["is_quote_status"] == True:
+        print("Retweet Quoted")
+        print("Tweet Date " + status._json["created_at"])
+        print("Retweet Myself My Quote", status._json["full_text"].encode("unicode-escape").decode("utf-8"))
+        try:
+            for eachtweeturl in status._json["extended_entities"]["media"]:
+                print("Retweet Myself My Picture Url", eachtweeturl["media_url_https"])
+        except KeyError:
+            pass
+        try:
+            for eachtweeturl in status._json["extended_entities"]["media"]:
+                print("Retweet Myself My Video Url", eachtweeturl["video_info"]["variants"][0]["url"])
+        except KeyError:
+            pass
+        print("Retweet Myself Origin Tweet Date", status._json["quoted_status"]["created_at"])
+        print("Retweet Myself Origin ID", status._json["quoted_status"]["id"])
+        print("Retweet Myself Origin Twitter Handle", status._json["quoted_status"]["user"]["screen_name"])
+        print("Retweet Myself Origin Text", status._json["quoted_status"]["full_text"].encode("unicode-escape").decode("utf-8"))
+        for eachtweeturl in status._json["quoted_status"]["entities"]["urls"]:
+            print("Retweet Myself Origin Url", eachtweeturl["expanded_url"])
+        try:
+            for eachtweeturl in status._json["quoted_status"]["extended_entities"]["media"]:
+                print("Retweet Myself Origin Picture Url", eachtweeturl["media_url_https"])
+        except KeyError:
+            pass
+        try:
+            for eachtweeturl in status._json["quoted_status"]["extended_entities"]["media"]:
+                print("Retweet Myself Origin Video Url", eachtweeturl["video_info"]["variants"][0]["url"])
+        except KeyError:
+            pass
+    elif status._json["retweeted"] == False:
+        print("Tweet")
+        print("Tweet Date " + status._json["created_at"])
+        print("Tweet Text " + status._json["full_text"].encode("unicode-escape").decode("utf-8"))
+        for eachtweeturl in status._json["entities"]["urls"]:
+            print("Tweet Url " + eachtweeturl["expanded_url"])
+        try:
+            for eachtweeturl in status._json["extended_entities"]["media"]:
+                print("Tweet Picture Url", eachtweeturl["media_url_https"])
+        except KeyError:
+            pass
+        try:
+            for eachtweeturl in status._json["extended_entities"]["media"]:
+                print("Tweet Video Url", eachtweeturl["video_info"]["variants"][0]["url"])
+        except KeyError:
+            pass
+    elif status._json["retweeted"] == True:
+        print("Retweet")
+        print("Tweet Date " + status._json["created_at"])
+        print("Retweet ID", status._json["retweeted_status"]["id"])
+        print("Retweet Date " + status._json["retweeted_status"]["created_at"])
+        print("Retweet From " + status._json["retweeted_status"]["user"]["screen_name"])
+        print("Retweet Text " + status._json["retweeted_status"]["full_text"].encode("unicode-escape").decode("utf-8"))
+        for eachtweeturl in status._json["retweeted_status"]["entities"]["urls"]:
+            print("Retweet Url " + eachtweeturl["url"])
+        try:
+            for eachtweeturl in status._json["retweeted_status"]["entities"]["media"]:
+                print("Retweet Picture Url " + eachtweeturl["media_url_https"])
+        except KeyError:
+            pass
+        try:
+            for eachtweeturl in status._json["retweeted_status"]["extended_entities"]["media"][0]["video_info"]["variants"]:
+                print("Retweet Video Url " + eachtweeturl["url"])
+        except KeyError:
+            pass
+    else:
+        print("Problem")
+
+#WIP 7 Numbered headers.  Ready for tab delimited .csv and join urls and pic urls.
+for status in api.user_timeline(id="inin61", tweet_mode="extended", count=150):
+    print("1 Tweet ID", status._json["id"])
+    print("2 Tweet Date " + status._json["created_at"])
+    if status._json["is_quote_status"] == True:
+        print("1b Tweet Type Retweet Quoted")
+        print("3 Tweet Text:  Retweet Myself My Quote", status._json["full_text"].encode("unicode-escape").decode("utf-8"))
+        for eachtweeturl in status._json["entities"]["urls"][:-1]:
+            print("4 Tweet Url:  Retweet Myself My Url " + eachtweeturl["expanded_url"])
+        try:
+            for eachtweeturl in status._json["extended_entities"]["media"]:
+                print("5 Tweet Picture Url:  Retweet Myself My Picture Url", eachtweeturl["media_url_https"])
+        except KeyError:
+            pass
+        print("6 Origin Tweet ID:  Retweet Myself Origin ID", status._json["quoted_status"]["id"])
+        print("7 Origin Tweet Date:  Retweet Myself Origin Tweet Date", status._json["quoted_status"]["created_at"])
+        print("8 Origin Tweet Handle:  Retweet Myself Origin Twitter Handle", status._json["quoted_status"]["user"]["screen_name"])
+        print("9 Origin Tweet Text:  Retweet Myself Origin Text", status._json["quoted_status"]["full_text"].encode("unicode-escape").decode("utf-8"))
+        try:
+            for eachtweeturl in status._json["quoted_status"]["entities"]["urls"]:
+                print("10 Origin Tweet Url:  Retweet Myself Origin Url", eachtweeturl["expanded_url"])
+        except:
+            pass
+        try:
+            for eachtweeturl in status._json["quoted_status"]["extended_entities"]["media"]:
+                print("10 Origin Tweet Url:  Retweet Myself Origin Video Url", eachtweeturl["video_info"]["variants"][0]["url"])
+        except KeyError:
+            pass
+        try:
+            for eachtweeturl in status._json["quoted_status"]["extended_entities"]["media"]:
+                print("11 Origin Tweet Pic Url:  Retweet Myself Origin Picture Url", eachtweeturl["media_url_https"])
+        except KeyError:
+            pass
+    elif status._json["retweeted"] == False:
+        print("1b Tweet Type Tweet")
+        print("3 Tweet Text " + status._json["full_text"].encode("unicode-escape").decode("utf-8"))
+        try:
+            for eachtweeturl in status._json["entities"]["urls"]:
+                print("4 Tweet Url " + eachtweeturl["expanded_url"])
+        except:
+            pass
+        try:
+            for eachtweeturl in status._json["extended_entities"]["media"]:
+                print("4 Tweet Url:  Tweet Video Url", eachtweeturl["video_info"]["variants"][0]["url"])
+        except KeyError:
+            pass
+        try:
+            for eachtweeturl in status._json["extended_entities"]["media"]:
+                print("5 Tweet Picture Url", eachtweeturl["media_url_https"])
+        except KeyError:
+            pass
+    elif status._json["retweeted"] == True:
+        print("1b Tweet Type Retweet")
+        try:
+            print("6 Origin Tweet ID:  Retweet ID", status._json["retweeted_status"]["id"])
+        except KeyError:
+            print("6 Origin Tweet ID:  Retweet Your Own Tweet ID", status._json["id"])
+        try:
+            print("7 Origin Tweet Date:  Retweet Date " + status._json["retweeted_status"]["created_at"])
+        except KeyError:
+            print("7 Origin Tweet Date:  Retweet Your Own Tweet Date " + status._json["created_at"])
+        try:
+            print("8 Origin Tweet Handle:  Retweet From " + status._json["retweeted_status"]["user"]["screen_name"])
+        except KeyError:
+            print("8 Origin Tweet Handle:  Retweet Your Own Tweet From " + status._json["user"]["screen_name"])
+        try:
+            print("9 Origin Tweet Text:  Retweet Text " + status._json["retweeted_status"]["full_text"].encode("unicode-escape").decode("utf-8"))
+        except KeyError:
+            print("9 Origin Tweet Text:  Retweet Your Own Tweet Text " + status._json["full_text"].encode("unicode-escape").decode("utf-8"))
+        try:
+            for eachtweeturl in status._json["retweeted_status"]["extended_entities"]["media"][0]["video_info"]["variants"]:
+                print("10 Origin Tweet Url:  Retweet Video Url " + eachtweeturl["url"])
+        except:
+            pass
+        try:
+            for eachtweeturl in status._json["retweeted_status"]["entities"]["urls"]:
+                print("10 Origin Tweet Url:  Retweet Url " + eachtweeturl["expanded_url"])
+        except KeyError:
+            for eachtweeturl in status._json["entities"]["urls"]:
+                print("10 Origin Tweet Url:  Retweet Your Own Url? " + eachtweeturl["expanded_url"])
+        try:
+            for eachtweeturl in status._json["retweeted_status"]["extended_entities"]["media"]:
+                print("11 Origin Tweet Pic Url:  Retweet Picture Url", eachtweeturl["media_url_https"])
+        except:
+            pass
+        try:
+            for eachtweeturl in status._json["extended_entities"]["media"]:
+                print("11 Origin Tweet Pic Url:  Retweet Your Own Picture Url", eachtweeturl["media_url_https"])
+        except KeyError:
+            pass
+        #One tweet used Retweet Your Own Video Url
+        # try:
+        #     for eachtweeturl in status._json["extended_entities"]["media"]:
+        #         print("Retweet Your Own Video Url", eachtweeturl["video_info"]["variants"][0]["url"])
+        # except KeyError:
+        #     pass
+    else:
+        print("Problem")
+    print("\n")
+
+colors = ["red", "blue", "white", "green", "black"]
+print(", ".join(colors)) #print red, blue, white, green, black
+header11 = ""
+for eachcolors in colors:
+    header11 = (", ".join(colors))
+print(header11) #print red, blue, white, green, blac
+links = ["https://pbs.twimg.com/media/EifVcOIXcAAYj1J.jpg", "https://pbs.twimg.com/media/EifVcYRWAAM-tw8.jpg", "https://pbs.twimg.com/media/EifVclEWoAAG1Zs.jpg", "https://pbs.twimg.com/media/EifVcvQX0AAMAbC.jpg"]
+print(", ".join(links)) #print https://pbs.twimg.com/media/EifVcOIXcAAYj1J.jpg, https://pbs.twimg.com/media/EifVcYRWAAM-tw8.jpg, https://pbs.twimg.com/media/EifVclEWoAAG1Zs.jpg, https://pbs.twimg.com/media/EifVcvQX0AAMAbC.jpg
+
+colors = ["white"]
+links = [n for n in colors]
+if len(links) == 1:
+    print("".join(links)) #print white
+else:
+    print(", ".join(links))
+colors = ["red", "blue", "white", "green", "black"]
+links = [n for n in colors]
+if len(links) == 1:
+    print("".join(links))
+else:
+    print(", ".join(links)) #print red, blue, white, green, black
+
+# for status in api.user_timeline(id="inin61", tweet_mode="extended", count=150):
+#     if status._json["id"] == 1308927370720505856:
+#         # for eachtweeturl in status._json["extended_entities"]["media"]:
+#         #     print(eachtweeturl["media_url_https"])
+#         print(status)
