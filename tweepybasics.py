@@ -565,7 +565,7 @@ def joinurls(links):
         return ", ".join(links)
 
 
-for status in tweepy.Cursor(api.user_timeline, id="inin61", tweet_mode="extended").items(201cp):
+for status in tweepy.Cursor(api.user_timeline, id="inin61", tweet_mode="extended").items(1):
     print("1 Tweet ID", status._json["id"])
     tweetlocaldatetime = convertutctimetolocaltime(status._json["created_at"])
     tweetdate, tweettime = tweetlocaldatetime[0], tweetlocaldatetime[1]
@@ -682,3 +682,194 @@ for status in tweepy.Cursor(api.user_timeline, id="inin61", tweet_mode="extended
     else:
         print("Problem")
     print("\n")
+
+#WIP 9 Final first draft.  Don't upload to GitHub.
+import tweepy
+import twitter_credentials as tc
+import datetime
+import pytz
+import csv
+
+authenticate = tweepy.OAuthHandler(tc.consumerkey, tc.consumersecret)
+authenticate.set_access_token(tc.accesstoken, tc.accesstokensecret)
+api = tweepy.API(authenticate)
+
+def convertutctimetolocaltime(twittercreatedate):
+    localtimezone = datetime.datetime.now(datetime.timezone(datetime.timedelta(0))).astimezone().tzinfo
+    twittercreatedatestrptime = datetime.datetime.strptime(twittercreatedate, "%a %b %d %H:%M:%S %z %Y")
+    convertutctolocal = twittercreatedatestrptime.replace(tzinfo=pytz.utc).astimezone(localtimezone)
+    datelocal = datetime.datetime.strftime(convertutctolocal, "%m/%d/%Y")
+    timelocal = datetime.datetime.strftime(convertutctolocal, "%I:%M:%S %p")
+    return datelocal, timelocal
+def joinurls(links):
+    if len(links) == 0:
+        return None
+    elif len(links) == 1:
+        return "".join(links)
+    else:
+        return ", ".join(links)
+
+
+with open("idtweets.csv", "w", newline="") as tweetsheader:
+    writeheader = csv.writer(tweetsheader, delimiter="\t")
+    writeheader.writerow(["Tweet ID", "Tweet Type", "Tweet Date", "Tweet Time", "Tweet Text", "Tweet URL", "Tweet Pic URL", "Origin Tweet ID", "Origin Tweet Date", "Origin Tweet Time", "Origin Tweet Handle", "Origin Tweet Text", "Origin Tweet URL", "Origin Tweet Pic URL"])
+
+for status in tweepy.Cursor(api.user_timeline, id="inin61", tweet_mode="extended").items(500):
+    (tweetID, tweetType, tweetDate, tweetTime, tweetText, tweetURL, tweetPicURL, originTweetID, originTweetDate, originTweetTime, originTweetHandle, originTweetText, originTweetURL, originTweetPicURL) = ("", "", "", "", "", "", "", "", "", "", "", "", "", "")
+    print("1 Tweet ID", status._json["id"])
+    tweetID = status._json["id"]
+    tweetlocaldatetime = convertutctimetolocaltime(status._json["created_at"])
+    tweetdate, tweettime = tweetlocaldatetime[0], tweetlocaldatetime[1]
+    print("2a Tweet Date " + tweetdate)
+    tweetDate = tweetdate
+    print("2b Tweet Time " + tweettime)
+    tweetTime = tweettime
+    if status._json["is_quote_status"] == True:
+        print("1b Tweet Type Retweet Quoted")
+        tweetType = "Retweet Quoted"
+        print("3 Tweet Text:  Retweet Myself My Quote", status._json["full_text"].encode("unicode-escape").decode("utf-8"))
+        tweetText = status._json["full_text"].encode("unicode-escape").decode("utf-8")
+        retweetmyselfmyurl = [eachtweeturl["expanded_url"] for eachtweeturl in status._json["entities"]["urls"][:-1]]
+        if retweetmyselfmyurl:
+            print("4 Tweet Url:  Retweet Myself My Url", joinurls(retweetmyselfmyurl))
+            tweetURL = joinurls(retweetmyselfmyurl)
+        try:
+            retweetmyselfmypictureurl = [eachtweeturl["media_url_https"] for eachtweeturl in status._json["extended_entities"]["media"]]
+            print("5 Tweet Picture Url:  Retweet Myself My Picture Url", joinurls(retweetmyselfmypictureurl))
+            tweetPicURL = joinurls(retweetmyselfmypictureurl)
+        except KeyError:
+            pass
+        print("6 Origin Tweet ID:  Retweet Myself Origin ID", status._json["quoted_status"]["id"])
+        originTweetID = status._json["quoted_status"]["id"]
+        origintweetlocaldatetime = convertutctimetolocaltime(status._json["quoted_status"]["created_at"])
+        origintweetdate, origintweettime = origintweetlocaldatetime[0], origintweetlocaldatetime[1]
+        print("7a Origin Tweet Date:  Retweet Myself Origin Tweet Date", origintweetdate)
+        originTweetDate = origintweetdate
+        print("7b Origin Tweet Time:  Retweet Myself Origin Tweet Date", origintweettime)
+        originTweetTime = origintweettime
+        print("8 Origin Tweet Handle:  Retweet Myself Origin Twitter Handle", status._json["quoted_status"]["user"]["screen_name"])
+        originTweetHandle = status._json["quoted_status"]["user"]["screen_name"]
+        print("9 Origin Tweet Text:  Retweet Myself Origin Text", status._json["quoted_status"]["full_text"].encode("unicode-escape").decode("utf-8"))
+        originTweetText = status._json["quoted_status"]["full_text"].encode("unicode-escape").decode("utf-8")
+        try:
+            retweetmyselforiginurl = [eachtweeturl["expanded_url"] for eachtweeturl in status._json["quoted_status"]["entities"]["urls"]]
+            if retweetmyselforiginurl:
+                print("10 Origin Tweet Url:  Retweet Myself Origin Url", joinurls(retweetmyselforiginurl))
+                originTweetURL = joinurls(retweetmyselforiginurl)
+        except:
+            pass
+        try:
+            retweetmyselforiginvideourl = [eachtweeturl["video_info"]["variants"][0]["url"] for eachtweeturl in status._json["quoted_status"]["extended_entities"]["media"]]
+            if retweetmyselforiginvideourl:
+                print("10 Origin Tweet Url:  Retweet Myself Origin Video Url", joinurls(retweetmyselforiginvideourl))
+                originTweetURL = joinurls(retweetmyselforiginvideourl)
+        except KeyError:
+            pass
+        try:
+            retweetmyselforiginpictureurl = [eachtweeturl["media_url_https"] for eachtweeturl in status._json["quoted_status"]["extended_entities"]["media"]]
+            print("11 Origin Tweet Pic Url:  Retweet Myself Origin Picture Url", joinurls(retweetmyselforiginpictureurl))
+            originTweetPicURL = joinurls(retweetmyselforiginpictureurl)
+        except KeyError:
+            pass
+    elif status._json["retweeted"] == False:
+        print("1b Tweet Type Tweet")
+        tweetType = "Tweet"
+        print("3 Tweet Text " + status._json["full_text"].encode("unicode-escape").decode("utf-8"))
+        tweetText = status._json["full_text"].encode("unicode-escape").decode("utf-8")
+        try:
+            tweeturl = [eachtweeturl["expanded_url"] for eachtweeturl in status._json["entities"]["urls"]]
+            if tweeturl:
+                print("4 Tweet Url", joinurls(tweeturl))
+                tweetURL = joinurls(tweeturl)
+        except:
+            pass
+        try:
+            tweeturlvideo = [eachtweeturl["video_info"]["variants"][0]["url"] for eachtweeturl in status._json["extended_entities"]["media"]]
+            print("4 Tweet Url:  Tweet Video Url", joinurls(tweeturlvideo))
+            tweetURL = joinurls(tweeturlvideo)
+        except KeyError:
+            pass
+        try:
+            tweetpictureurl = [eachtweeturl["media_url_https"] for eachtweeturl in status._json["extended_entities"]["media"]]
+            print("5 Tweet Picture Url", joinurls(tweetpictureurl))
+            tweetPicURL = joinurls(tweetpictureurl)
+        except KeyError:
+            pass
+    elif status._json["retweeted"] == True:
+        print("1b Tweet Type Retweet")
+        tweetType = "Retweet"
+        try:
+            print("6 Origin Tweet ID:  Retweet ID", status._json["retweeted_status"]["id"])
+            originTweetID = status._json["retweeted_status"]["id"]
+        except KeyError:
+            print("6 Origin Tweet ID:  Retweet Your Own Tweet ID", status._json["id"])
+            originTweetID = status._json["id"]
+        try:
+            originretweetlocaldatetime = convertutctimetolocaltime(status._json["retweeted_status"]["created_at"])
+            originretweetdate, originretweettime = originretweetlocaldatetime[0], originretweetlocaldatetime[1]
+            print("7a Origin Tweet Date:  Retweet Date " + originretweetdate)
+            originTweetDate = originretweetdate
+            print("7b Origin Tweet Time:  Retweet Time " + originretweettime)
+            originTweetTime = originretweettime
+        except KeyError:
+            originretweetownlocaldatetime = convertutctimetolocaltime(status._json["created_at"])
+            originretweetowndate, originretweetowntime = originretweetownlocaldatetime[0], originretweetownlocaldatetime[1]
+            print("7a Origin Tweet Date:  Retweet Your Own Tweet Date " + originretweetowndate)
+            originTweetDate = originretweetowndate
+            print("7b Origin Tweet Time:  Retweet Your Own Tweet Time " + originretweetowntime)
+            originTweetTime = originretweetowntime
+        try:
+            print("8 Origin Tweet Handle:  Retweet From " + status._json["retweeted_status"]["user"]["screen_name"])
+            originTweetHandle = status._json["retweeted_status"]["user"]["screen_name"]
+        except KeyError:
+            print("8 Origin Tweet Handle:  Retweet Your Own Tweet From " + status._json["user"]["screen_name"])
+            originTweetHandle = status._json["user"]["screen_name"]
+        try:
+            print("9 Origin Tweet Text:  Retweet Text " + status._json["retweeted_status"]["full_text"].encode("unicode-escape").decode("utf-8"))
+            originTweetText = status._json["retweeted_status"]["full_text"].encode("unicode-escape").decode("utf-8")
+        except KeyError:
+            print("9 Origin Tweet Text:  Retweet Your Own Tweet Text " + status._json["full_text"].encode("unicode-escape").decode("utf-8"))
+            originTweetText = status._json["full_text"].encode("unicode-escape").decode("utf-8")
+        try:
+            origintweeturlretweetvideourl = [eachtweeturl["url"] for eachtweeturl in status._json["retweeted_status"]["extended_entities"]["media"][0]["video_info"]["variants"]]
+            if origintweeturlretweetvideourl:
+                print("10 Origin Tweet Url:  Retweet Video Url ", joinurls(origintweeturlretweetvideourl))
+                originTweetURL = joinurls(origintweeturlretweetvideourl)
+        except:
+            pass
+        try:
+            origintweeturlretweeturl = [eachtweeturl["expanded_url"] for eachtweeturl in status._json["retweeted_status"]["entities"]["urls"]]
+            if origintweeturlretweeturl:
+                print("10 Origin Tweet Url:  Retweet Url", joinurls(origintweeturlretweeturl))
+                originTweetURL = joinurls(origintweeturlretweeturl)
+        except KeyError:
+            origintweeturlretweetyourownurl = [eachtweeturl["expanded_url"] for eachtweeturl in status._json["entities"]["urls"]]
+            if origintweeturlretweetyourownurl:
+                print("10 Origin Tweet Url:  Retweet Your Own Url?", joinurls(origintweeturlretweetyourownurl))
+                originTweetURL = joinurls(origintweeturlretweetyourownurl)
+        try:
+            origintweetpicurlretweetpictureurl = [eachtweeturl["media_url_https"] for eachtweeturl in status._json["retweeted_status"]["extended_entities"]["media"]]
+            print("11 Origin Tweet Pic Url:  Retweet Picture Url", joinurls(origintweetpicurlretweetpictureurl))
+            originTweetPicURL = joinurls(origintweetpicurlretweetpictureurl)
+        except:
+            pass
+        try:
+            origintweetpicurlretweetyourownpictureurl = [eachtweeturl["media_url_https"] for eachtweeturl in status._json["extended_entities"]["media"]]
+            print("11 Origin Tweet Pic Url:  Retweet Your Own Picture Url", joinurls(origintweetpicurlretweetyourownpictureurl))
+            originTweetPicURL = joinurls(origintweetpicurlretweetyourownpictureurl)
+        except KeyError:
+            pass
+    else:
+        print("Problem")
+    print("\n")
+    with open("idtweets.csv", "a", newline="") as tweets:
+        writetweets = csv.writer(tweets, delimiter="\t")
+        writetweets.writerow([tweetID, tweetType, tweetDate, tweetTime, tweetText, tweetURL, tweetPicURL, originTweetID, originTweetDate, originTweetTime, originTweetHandle, originTweetText, originTweetURL, originTweetPicURL])
+
+#Print specific tweets by tweet id
+#API.statuses_lookup(id_[, include_entities][, trim_user][, map_][, include_ext_alt_text][, include_card_uri]).  Returns full Tweet objects for up to 100 tweets per request, specified by the id_ parameter.
+onetweet = api.statuses_lookup([1162046836330262528])
+print(onetweet) #print [Status(_api=<tweepy.api.API object at 0x7ff10261a3c8>, _json={'created_at': 'Thu Aug 15 17:02:10 +0000 2019', 'id': 1162046836330262528, 'id_str': '1162046836330262528', 'text': 'Update: DeMarcus Cousins reportedly suffered a torn ACL. \n\nThe former All-Star has torn his Achilles, quad and now… https://t.co/hQGYeH7UYf', . . .
+onetweet = api.statuses_lookup([1162046836330262528], tweet_mode="extended")
+for eachonetweet in onetweet:
+    print(eachonetweet._json) #print
